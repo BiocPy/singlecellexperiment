@@ -1,7 +1,8 @@
 from __future__ import annotations
 
 from collections import OrderedDict
-from typing import Any, Dict, List, Optional, Sequence, Union
+from collections.abc import Sequence
+from typing import Any, Dict, List, Optional, Union
 from warnings import warn
 
 import biocframe
@@ -435,7 +436,7 @@ class SingleCellExperiment(RangedSummarizedExperiment):
             f"size_factors({0 if _sf is None else len(_sf)}): {' ' if _sf is None else ut.print_truncated_list(_sf)}\n"
         )
 
-        output += f"metadata({str(len(self.metadata))}): {ut.print_truncated_list(list(self.metadata.keys()), sep=' ', include_brackets=False, transform=lambda y: y)}\n"
+        output += f"metadata({len(self.metadata)!s}): {ut.print_truncated_list(list(self.metadata.keys()), sep=' ', include_brackets=False, transform=lambda y: y)}\n"
 
         return output
 
@@ -1646,7 +1647,7 @@ class SingleCellExperiment(RangedSummarizedExperiment):
         return obj, adatas
 
     @classmethod
-    def from_anndata(cls, input: "anndata.AnnData") -> SingleCellExperiment:
+    def from_anndata(cls, input: anndata.AnnData) -> SingleCellExperiment:
         """Create a ``SingleCellExperiment`` from :py:class:`~anndata.AnnData`.
 
         If the input contains any data in the ``uns`` attribute, the
@@ -1903,7 +1904,7 @@ def combine_columns(*x: SingleCellExperiment) -> SingleCellExperiment:
         _new_rdim = merge_generic(x, by="row", attr="reduced_dims")
     except Exception as e:
         warn(
-            f"Cannot combine 'reduced_dimensions' across experiments, {str(e)}",
+            f"Cannot combine 'reduced_dimensions' across experiments, {e!s}",
             UserWarning,
         )
 
@@ -1912,7 +1913,7 @@ def combine_columns(*x: SingleCellExperiment) -> SingleCellExperiment:
         _new_alt_expt = merge_generic(x, by="column", attr="alternative_experiments")
     except Exception as e:
         warn(
-            f"Cannot combine 'alternative_experiments' across experiments, {str(e)}",
+            f"Cannot combine 'alternative_experiments' across experiments, {e!s}",
             UserWarning,
         )
 
@@ -2008,7 +2009,7 @@ def relaxed_combine_columns(
         _new_rdim = relaxed_merge_numpy_generic(x, by="row", attr="reduced_dims", names_attr="reduced_dim_names")
     except Exception as e:
         warn(
-            f"Cannot combine 'reduced_dimensions' across experiments, {str(e)}",
+            f"Cannot combine 'reduced_dimensions' across experiments, {e!s}",
             UserWarning,
         )
 
@@ -2017,7 +2018,7 @@ def relaxed_combine_columns(
         _new_alt_expt = relaxed_merge_generic(x, by="column", attr="alternative_experiments")
     except Exception as e:
         warn(
-            f"Cannot combine 'alternative_experiments' across experiments, {str(e)}",
+            f"Cannot combine 'alternative_experiments' across experiments, {e!s}",
             UserWarning,
         )
 
